@@ -48,7 +48,7 @@ class CardWidget(QFrame):
         # stylesheet
         self.setStyleSheet("""
             QFrame {
-                border: 1px solid white;
+                border: 1px solid #474747;
                 border-radius: 5px;
             }
 

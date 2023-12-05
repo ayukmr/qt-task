@@ -9,13 +9,13 @@ class CreateButton(QPushButton):
         self.setStyleSheet("""
             QPushButton {
                 border-radius: 4px;
-                border: 1px solid white;
+                border: 1px solid #474747;
                 font-size: 15px;
                 padding: 3px 6px;
             }
 
             QPushButton::hover {
-                color: black;
-                background: white;
+                color: white;
+                background: #474747;
             }
         """)
