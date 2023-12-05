@@ -1,0 +1,2 @@
+# qt bindings
+pyside6~=6.6
