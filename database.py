@@ -16,7 +16,7 @@ class Cards(Base):
     __tablename__ = 'Cards'
 
     # card id
-    id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=idlength)).lower()
+    id = Column(String, primary_key=True, default=lambda: binascii.b2a_hex(os.urandom(16)).decode('utf-8'))
 
     # card title
     title = Column(String)
