@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLineEdit, QPus
 
 # card dialog
 class CardDialog(QDialog):
-    def __init__(self, parent, callback, defaults={'difficulty:': '5', 'title': '', 'description': ''}, extra_button=None):
+    def __init__(self, parent, callback, defaults={'difficulty': 5, 'title': '', 'description': ''}, extra_button=None):
         super().__init__(parent)
 
         # callback function
@@ -17,7 +17,7 @@ class CardDialog(QDialog):
         self.difficulty_slider = QSlider(Qt.Horizontal)
         self.difficulty_slider.setMinimum(1)
         self.difficulty_slider.setMaximum(10)
-        self.difficulty_slider.setValue(int(defaults['difficulty:']))
+        self.difficulty_slider.setValue(defaults['difficulty'])
         self.difficulty_slider.setTickInterval(1)
 
         # difficulty label
@@ -73,7 +73,7 @@ class CardDialog(QDialog):
         # run callback
         self.callback(
             self.title_edit.text(),
-            str(self.difficulty_slider.value()),
+            self.difficulty_slider.value(),
             self.description_edit.text()
         )
 

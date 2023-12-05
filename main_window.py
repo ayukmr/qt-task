@@ -1,8 +1,8 @@
+import database
+
 from card_widget import CardWidget
 from card_dialog import CardDialog
 from create_button import CreateButton
-
-import requests
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QWidget, QLabel, QSlider, QScrollArea, QPushButton
@@ -83,8 +83,7 @@ class MainWindow(QMainWindow):
     # create card
     def create_card(self, title, difficulty, description):
         # add card
-        card = {'title': title, 'difficulty': difficulty, 'description': description}
-        requests.post('http://localhost:5000/api/makecard', json = card)
+        database.insert(title, difficulty, description)
 
         # reload cards
         self.reload_cards()
@@ -100,8 +99,7 @@ class MainWindow(QMainWindow):
     # update card
     def update_card(self, id, title, difficulty, description):
         # edit card
-        card = {'id': id, 'title': title, 'difficulty': difficulty, 'description': description}
-        requests.post('http://localhost:5000/api/editcard', json=card)
+        database.update(id, title, difficulty, description)
 
         # reload cards
         self.reload_cards()
@@ -109,14 +107,14 @@ class MainWindow(QMainWindow):
     # delete card
     def delete_card(self, id):
         # remove card
-        requests.post('http://localhost:5000/api/removecard', json={'id': id})
+        database.delete(id)
 
         # reload cards
         self.reload_cards()
 
     # reload cards
     def reload_cards(self):
-        self.cards = requests.post('http://localhost:5000/api/getcards').json()['cards']
+        self.cards = database.all()
         self.display_cards()
 
     # reload cards
@@ -136,7 +134,7 @@ class MainWindow(QMainWindow):
 
         # filter difficulties
         cards = list(filter(
-            lambda card: int(card['difficulty:']) <= self.difficulty_slider.value(),
+            lambda card: card['difficulty'] <= self.difficulty_slider.value(),
             self.cards
         ))
 
@@ -144,7 +142,7 @@ class MainWindow(QMainWindow):
             return
 
         # sort cards
-        cards.sort(key=lambda card: int(card['difficulty:']), reverse=True)
+        cards.sort(key=lambda card: card['difficulty'], reverse=True)
 
         # add priority
         priority = cards.pop(0)

@@ -26,7 +26,7 @@ class CardWidget(QFrame):
         difficulty_font.setBold(True)
 
         # difficulty label
-        self.difficulty_label = QLabel(card['difficulty:'])
+        self.difficulty_label = QLabel(str(card['difficulty']))
         self.difficulty_label.setAlignment(Qt.AlignCenter)
         self.difficulty_label.setFont(difficulty_font)
 
