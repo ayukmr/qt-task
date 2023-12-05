@@ -1,2 +1,5 @@
 # qt bindings
 pyside6~=6.6
+
+# sql orm
+sqlalchemy~=2.0
