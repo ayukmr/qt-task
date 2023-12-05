@@ -1,4 +1,4 @@
-import os, binascii
+import random, string
 
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -16,7 +16,8 @@ class Cards(Base):
     __tablename__ = 'Cards'
 
     # card id
-    id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=idlength)).lower()
+    generate_id = lambda: ''.join(random.choices(string.ascii_lowercase + string.digits, k=16))
+    id = Column(String, primary_key=True, default=generate_id)
 
     # card title
     title = Column(String)
