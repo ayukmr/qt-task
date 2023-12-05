@@ -5,7 +5,7 @@ from create_button import CreateButton
 import requests
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QWidget, QLabel, QSlider, QScrollArea
+from PySide6.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QWidget, QLabel, QSlider, QScrollArea, QPushButton
 from PySide6.QtGui import QFont
 
 # main window
@@ -83,17 +83,25 @@ class MainWindow(QMainWindow):
     # create card
     def create_card(self, title, difficulty, description):
         # add card
-        card = { 'title': title, 'difficulty': difficulty, 'description': description }
+        card = {'title': title, 'difficulty': difficulty, 'description': description}
         requests.post('http://localhost:5000/api/makecard', json = card)
 
         # reload cards
         self.reload_cards()
 
+    # show card dialog
+    def card_dialog(self, card):
+        # save button
+        delete_button = QPushButton('Delete Card')
+        delete_button.clicked.connect(lambda: self.delete_card(card['id']))
+
+        CardDialog(self, lambda *args: self.update_card(card['id'], *args), card, delete_button).exec()
+
     # update card
     def update_card(self, id, title, difficulty, description):
         # edit card
-        card = { 'id': id, 'title': title, 'difficulty': difficulty, 'description': description }
-        requests.post('http://localhost:5000/api/editcard', json = card)
+        card = {'id': id, 'title': title, 'difficulty': difficulty, 'description': description}
+        requests.post('http://localhost:5000/api/editcard', json=card)
 
         # reload cards
         self.reload_cards()
@@ -101,7 +109,7 @@ class MainWindow(QMainWindow):
     # delete card
     def delete_card(self, id):
         # remove card
-        requests.post('http://localhost:5000/api/removecard', json = { 'id': id })
+        requests.post('http://localhost:5000/api/removecard', json={'id': id})
 
         # reload cards
         self.reload_cards()
@@ -140,7 +148,7 @@ class MainWindow(QMainWindow):
 
         # add priority
         priority = cards.pop(0)
-        self.cards_layout.addWidget(CardWidget(priority))
+        self.cards_layout.addWidget(CardWidget(priority, self.card_dialog))
 
         # row layout
         row_layout = QHBoxLayout()
@@ -155,7 +163,7 @@ class MainWindow(QMainWindow):
                 row_layout.setAlignment(Qt.AlignLeft)
 
             # add card
-            card_widget = CardWidget(card)
+            card_widget = CardWidget(card, self.card_dialog)
             row_layout.addWidget(card_widget)
 
         self.cards_layout.addLayout(row_layout)

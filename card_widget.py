@@ -4,10 +4,8 @@ from PySide6.QtWidgets import QFrame, QVBoxLayout, QLabel
 
 # card widget
 class CardWidget(QFrame):
-    def __init__(self, card):
+    def __init__(self, card, show_dialog):
         super().__init__()
-
-        self.card = card
 
         description_font = QFont()
         description_font.setPointSize(15)
@@ -43,6 +41,9 @@ class CardWidget(QFrame):
         self.layout.addWidget(self.difficulty_label)
         self.layout.addWidget(self.title_label)
         self.layout.addWidget(self.description_label)
+
+        # show dialog
+        self.mousePressEvent = lambda _event: show_dialog(card)
 
         # stylesheet
         self.setStyleSheet("""

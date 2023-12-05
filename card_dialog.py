@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLineEdit, QPus
 
 # card dialog
 class CardDialog(QDialog):
-    def __init__(self, parent, callback):
+    def __init__(self, parent, callback, defaults={'difficulty:': '5', 'title': '', 'description': ''}, extra_button=None):
         super().__init__(parent)
 
         # callback function
@@ -17,7 +17,7 @@ class CardDialog(QDialog):
         self.difficulty_slider = QSlider(Qt.Horizontal)
         self.difficulty_slider.setMinimum(1)
         self.difficulty_slider.setMaximum(10)
-        self.difficulty_slider.setValue(5)
+        self.difficulty_slider.setValue(int(defaults['difficulty:']))
         self.difficulty_slider.setTickInterval(1)
 
         # difficulty label
@@ -36,7 +36,10 @@ class CardDialog(QDialog):
 
         # value edits
         self.title_edit = QLineEdit(self)
+        self.title_edit.setText(defaults['title'])
+
         self.description_edit = QLineEdit(self)
+        self.description_edit.setText(defaults['description'])
 
         # layout rows
         form_layout.addRow('Title:', self.title_edit)
@@ -50,8 +53,20 @@ class CardDialog(QDialog):
         # main layout
         self.layout = QVBoxLayout(self)
         self.layout.addLayout(form_layout)
-        self.layout.addWidget(save_button)
-        self.setMinimumSize(400, 200)
+
+        if extra_button:
+            buttons_layout = QHBoxLayout()
+            buttons_layout.addWidget(save_button)
+
+            # add extra button
+            buttons_layout.addWidget(extra_button)
+            extra_button.clicked.connect(lambda: self.accept())
+
+            self.layout.addLayout(buttons_layout)
+        else:
+            self.layout.addWidget(save_button)
+
+        self.setMinimumSize(400, 190)
 
     # save card
     def on_save(self):
