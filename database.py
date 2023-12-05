@@ -13,7 +13,7 @@ session = Session()
 
 # Cards database
 class Cards(Base):
-    __tablename__ = 'Cards'
+    __tablename__ = 'cards'
 
     # card id
     generate_id = lambda: ''.join(random.choices(string.ascii_lowercase + string.digits, k=16))
